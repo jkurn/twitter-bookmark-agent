@@ -1,0 +1,10 @@
+.env
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+dist/
+.aws-sam/
+data/
+*.json
+!data/.gitkeep
