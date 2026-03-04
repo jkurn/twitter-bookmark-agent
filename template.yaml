@@ -1,0 +1,69 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: Twitter Bookmark Agent — Telegram RAG bot
+
+Globals:
+  Function:
+    Timeout: 30
+    MemorySize: 256
+    Runtime: python3.11
+
+Resources:
+  BookmarkAgentFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: handler.handler
+      CodeUri: src/
+      Description: Telegram webhook handler for bookmark agent
+      Environment:
+        Variables:
+          OPENROUTER_API_KEY: !Ref OpenRouterApiKey
+          LLM_MODEL: !Ref LlmModel
+          OPENAI_API_KEY: !Ref OpenAiApiKey
+          PINECONE_API_KEY: !Ref PineconeApiKey
+          PINECONE_INDEX_NAME: !Ref PineconeIndexName
+          TELEGRAM_BOT_TOKEN: !Ref TelegramBotToken
+          TELEGRAM_WEBHOOK_SECRET: !Ref TelegramWebhookSecret
+      Events:
+        WebhookPost:
+          Type: Api
+          Properties:
+            Path: /webhook
+            Method: post
+        HealthGet:
+          Type: Api
+          Properties:
+            Path: /health
+            Method: get
+
+Parameters:
+  OpenRouterApiKey:
+    Type: String
+    NoEcho: true
+  LlmModel:
+    Type: String
+    Default: "anthropic/claude-sonnet-4-5"
+  OpenAiApiKey:
+    Type: String
+    NoEcho: true
+  PineconeApiKey:
+    Type: String
+    NoEcho: true
+  PineconeIndexName:
+    Type: String
+    Default: "twitter-bookmarks"
+  TelegramBotToken:
+    Type: String
+    NoEcho: true
+  TelegramWebhookSecret:
+    Type: String
+    Default: ""
+    NoEcho: true
+
+Outputs:
+  WebhookUrl:
+    Description: Telegram webhook URL (set this via set_webhook.py)
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/webhook"
+  ApiUrl:
+    Description: API Gateway base URL
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/"
