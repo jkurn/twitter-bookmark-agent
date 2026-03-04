@@ -1,5 +1,7 @@
 # Twitter Bookmark Agent
 
+Chat with the agent here: t.me/chatwithbookmark_bot
+
 A Telegram chatbot that lets you chat with your Twitter/X bookmarks using RAG (Retrieval-Augmented Generation). Ask it a question, and it retrieves the most relevant bookmarks via vector search and synthesizes an answer with citations.
 
 Built for a personal collection of 2,450+ bookmarks on AI, productivity, and building.
