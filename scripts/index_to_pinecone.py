@@ -2,13 +2,13 @@
 Embed all parsed bookmarks and upsert to Pinecone.
 
 Reads data/bookmarks.json (output of parse_bookmarks.py),
-embeds each record with OpenAI text-embedding-3-small,
+embeds each record via OpenRouter (text-embedding-3-small),
 and upserts to a Pinecone index.
 
 Usage:
     python scripts/index_to_pinecone.py [--dry-run] [--batch-size 100]
 
-Cost estimate: ~$0.03 for all 2,451 bookmarks at $0.02/1M tokens.
+Cost estimate: ~$0.03 for all 2,451 bookmarks.
 """
 
 import argparse
@@ -28,7 +28,7 @@ from config import settings  # noqa: E402
 REPO_ROOT = Path(__file__).parent.parent
 BOOKMARKS_FILE = REPO_ROOT / "data" / "bookmarks.json"
 
-EMBEDDING_MODEL = "text-embedding-3-small"
+EMBEDDING_MODEL = "openai/text-embedding-3-small"
 EMBEDDING_DIMS = 1536
 PINECONE_INDEX = settings.pinecone_index_name
 PINECONE_CLOUD = "aws"
@@ -98,8 +98,8 @@ def main():
     args = parser.parse_args()
 
     # Validate env
-    if not settings.openai_api_key:
-        print("ERROR: OPENAI_API_KEY not set. Copy .env.example to .env and fill it in.", file=sys.stderr)
+    if not settings.openrouter_api_key:
+        print("ERROR: OPENROUTER_API_KEY not set. Copy .env.example to .env and fill it in.", file=sys.stderr)
         sys.exit(1)
     if not settings.pinecone_api_key:
         print("ERROR: PINECONE_API_KEY not set. Copy .env.example to .env and fill it in.", file=sys.stderr)
@@ -115,8 +115,11 @@ def main():
 
     print(f"Loaded {len(bookmarks)} bookmarks from {BOOKMARKS_FILE}")
 
-    # Init clients
-    openai_client = OpenAI(api_key=settings.openai_api_key)
+    # Init clients (embeddings via OpenRouter)
+    openrouter_client = OpenAI(
+        api_key=settings.openrouter_api_key,
+        base_url=settings.openrouter_base_url,
+    )
     pc = Pinecone(api_key=settings.pinecone_api_key)
 
     if not args.dry_run:
@@ -148,7 +151,7 @@ def main():
             continue
 
         # Embed
-        embeddings = get_embeddings(openai_client, texts)
+        embeddings = get_embeddings(openrouter_client, texts)
 
         # Build upsert vectors
         vectors = []

@@ -16,13 +16,11 @@ class Settings(BaseSettings):
     # Bookmark data
     bookmarks_dir: str = "/Users/jonathankurniawan/Documents/Claude Cowork/Second Brain/Twitter Bookmarks"
 
-    # OpenRouter — LLM calls
+    # OpenRouter — all API calls (LLM + embeddings)
     openrouter_api_key: str
     openrouter_base_url: str = "https://openrouter.ai/api/v1"
     llm_model: str = "anthropic/claude-sonnet-4-5"
-
-    # OpenAI — embeddings only
-    openai_api_key: str = ""
+    embedding_model: str = "openai/text-embedding-3-small"
 
     # Pinecone
     pinecone_api_key: str = ""
