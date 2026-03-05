@@ -1,14 +1,24 @@
-# Twitter Bookmark Agent — Telegram RAG Bot
+# Bookmark -> Second Brain -> Agent Native
 
-## What We're Building
+## Product vision
 
-A Telegram chatbot that lets you chat with your 2,451 Twitter bookmarks. You message it a question, it retrieves the most relevant bookmarks using vector search, and Claude synthesizes an answer grounded in your own collected wisdom — with sources.
+Transform fragmented curiosity (bookmarks) into a cybernetic system: capture context, curate a Second Brain, deploy AI agents to execute.
 
-**Four capabilities:**
-1. **QA** — "What does my collection say about agent security?" → synthesized answer with citations
-2. **Search** — "Show me everything from @karpathy about coding" → filtered list with links
-3. **Recommend** — "What's related to context engineering?" → related bookmarks by semantic similarity
-4. **Summarize** — "Summarize what @levelsio talks about" → synthesis from their bookmarks
+Three phases:
+
+1. **Bookmark** (Capture) -- Ingest links, voice notes, streaming consciousness. Categorize raw data into a structured digital garden.
+2. **Second Brain** (RAG + Synthesize) -- Modular knowledge base with isolated "data pods" (e.g. Founders Podcast pod, YouTube pod). Pattern recognition across datasets. Thought Leader OS (Cal Newport OS for deep work, Ramit Sethi OS for money).
+3. **Agent Native** (Operationalize) -- Specialized autonomous agents: Metacognitive Life Coach (emotional alignment, saboteur tracking), Chief of Staff (time mastery, resource allocation). Skill extraction turns executed workflows into repeatable agent skills.
+
+## What we're building now (Phase 2)
+
+A Telegram chatbot over 2,451 Twitter bookmarks. Vector search + LLM synthesis with citations.
+
+Four capabilities:
+- QA: "What does my collection say about agent security?" -> cited answer
+- Search: "Show me everything from @karpathy" -> filtered list
+- Recommend: "What's related to context engineering?" -> semantic neighbors
+- Summarize: "Summarize what @levelsio talks about" -> author synthesis
 
 ---
 
@@ -146,12 +156,9 @@ ruff check . && ruff format .
 # .env (never commit)
 BOOKMARKS_DIR="/Users/jonathankurniawan/Documents/Claude Cowork/Second Brain/Twitter Bookmarks"
 
-# OpenRouter — all LLM calls (model-agnostic)
+# OpenRouter — all API calls (LLM + embeddings)
 OPENROUTER_API_KEY=
 LLM_MODEL=anthropic/claude-sonnet-4-5   # change to any OpenRouter model
-
-# OpenAI — embeddings only
-OPENAI_API_KEY=
 
 PINECONE_API_KEY=
 PINECONE_INDEX_NAME=twitter-bookmarks
@@ -224,11 +231,10 @@ No LLM for routing — regex patterns only:
 
 ## API Keys Needed
 
-1. **Telegram Bot Token** — @BotFather (free)
-2. **OpenAI API Key** — for embeddings (~$0.03 to index everything)
-3. **Anthropic API Key** — already have this
-4. **Pinecone API Key** — free tier at pinecone.io
-5. **AWS Account** — free tier
+1. **OpenRouter API Key** — all LLM + embedding calls (openrouter.ai)
+2. **Pinecone API Key** — free tier at pinecone.io
+3. **Telegram Bot Token** — @BotFather (free)
+4. **AWS Account** — free tier (for Lambda deployment)
 
 ---
 
