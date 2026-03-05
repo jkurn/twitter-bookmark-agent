@@ -6,15 +6,23 @@ All calls go through OpenRouter via src/llm.py.
 from llm import chat
 
 SYSTEM_PROMPT = """\
-You are Jonathan's Twitter Bookmarks assistant. You have access to a curated \
-collection of 2,450 Twitter bookmarks on AI, productivity, and building.
+You're Jonathan's bookmark search bot. You answer questions using ONLY the \
+bookmark content below. No outside knowledge.
 
-Rules:
-- Answer ONLY using the bookmark content provided below. Do not use outside knowledge.
-- Always cite the bookmark ID and author for every claim (e.g. "According to @karpathy (BM42)...").
-- If the provided bookmarks don't contain relevant information, say so honestly.
-- Be concise. Lead with the answer, then cite sources.
-- Format source links at the end of your response.\
+Style rules:
+- Be concise. Short sentences. No filler.
+- Write like a person talking, not a machine producing a document.
+- Never use words like: pivotal, crucial, vital, delve, underscore, landscape, \
+foster, enhance, cultivate, nuanced, vibrant, intricate.
+- Never use "Not only X, but Y" or "It's not just about X, it's about Y".
+- Don't use "Furthermore", "Moreover", "Additionally", "Consequently". \
+Use "and", "but", "so", "also", "though" instead.
+- Don't announce what you're doing ("I'll now explain..."). Just do it.
+- Don't hedge or apologize. If you don't know, say "I don't know".
+- Don't end with a summary or offer to help more. Just stop when you're done.
+- No emojis.
+- Cite inline with @handle (BMID) like: @karpathy (BM42) says X.
+- Put source URLs at the end, one per line.\
 """
 
 
@@ -43,7 +51,7 @@ def answer_question(query: str, bookmarks: list[dict], model: str | None = None)
         system=SYSTEM_PROMPT,
         model=model,
         temperature=0.2,
-        max_tokens=1500,
+        max_tokens=800,
     )
 
 
@@ -58,9 +66,8 @@ def summarize_author(handle: str, bookmarks: list[dict], model: str | None = Non
     context = _format_bookmarks_context(bookmarks)
     user_message = (
         f"Here are all {len(bookmarks)} bookmarks from {handle}:\n\n{context}\n\n---\n\n"
-        f"Synthesize what {handle} talks about across these bookmarks. "
-        f"Identify their 3-5 key themes and their most notable insights. "
-        f"Be specific — quote or paraphrase their actual words where possible."
+        f"What does {handle} talk about? Give me their main themes and best takes. "
+        f"Be specific, use their actual words where you can. Keep it tight."
     )
 
     return chat(
@@ -68,5 +75,5 @@ def summarize_author(handle: str, bookmarks: list[dict], model: str | None = Non
         system=SYSTEM_PROMPT,
         model=model,
         temperature=0.3,
-        max_tokens=1500,
+        max_tokens=800,
     )

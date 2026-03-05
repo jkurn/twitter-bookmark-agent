@@ -40,31 +40,26 @@ def create_app() -> Application:
 
 async def start_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     await update.message.reply_text(
-        "Hey! I'm your Twitter Bookmarks assistant.\n\n"
-        "Ask me anything about your 2,450 bookmarks — I'll find the most "
-        "relevant ones and give you an answer with sources.\n\n"
-        "Try: \"What does my collection say about AI agents?\"\n"
-        "Or:  \"Show me everything from @karpathy\"\n\n"
-        "Type /help to see all commands."
+        "Your bookmarks bot. 2,450 tweets indexed and searchable.\n\n"
+        "Just ask me something. Examples:\n"
+        "- What do my bookmarks say about AI agents?\n"
+        "- Show me everything from @karpathy\n"
+        "- Summarize what @levelsio talks about\n\n"
+        "/help for more."
     )
 
 
 async def help_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     await update.message.reply_text(
-        "Here's what I can do:\n\n"
-        "💬 *Ask a question*\n"
-        "\"What does my collection say about agent security?\"\n"
-        "→ Synthesized answer with bookmark citations.\n\n"
-        "🔍 *Search*\n"
-        "\"Show me everything from @karpathy about coding\"\n"
-        "→ Filtered list of matching bookmarks.\n\n"
-        "🔗 *Recommend*\n"
-        "\"What's related to context engineering?\"\n"
-        "→ Semantically similar bookmarks.\n\n"
-        "📝 *Summarize*\n"
-        "\"Summarize what @levelsio talks about\"\n"
-        "→ Synthesis of an author's key themes.\n",
-        parse_mode="Markdown",
+        "Four things I can do:\n\n"
+        "Ask a question\n"
+        "\"What do my bookmarks say about agent security?\"\n\n"
+        "Search\n"
+        "\"Show me everything from @karpathy\"\n\n"
+        "Recommend\n"
+        "\"What's related to context engineering?\"\n\n"
+        "Summarize\n"
+        "\"Summarize what @levelsio talks about\""
     )
 
 
